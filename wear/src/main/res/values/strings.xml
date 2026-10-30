@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Quick Task</string>
+    <string name="tile_label">Quick Task</string>
+    <string name="tile_description">Tap to dictate a task to your Obsidian vault</string>
+</resources>

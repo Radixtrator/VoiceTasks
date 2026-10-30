@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Voice Tasks</string>
+    <string name="settings_label">Voice Tasks</string>
+    <string name="capture_label">Quick Task</string>
+</resources>
