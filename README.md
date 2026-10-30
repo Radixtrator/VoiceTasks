@@ -103,3 +103,7 @@ Settings › Advanced features › Customize keys › Home key double press › 
 - Repeating tasks ("every Monday") aren't supported yet.
 - Spoken English only.
 - Geofence arrivals can take a minute or two, and need location services on.
+
+## License
+
+MIT. See [LICENSE](LICENSE).
