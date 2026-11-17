@@ -23,6 +23,9 @@ uses Gemini Nano when the phone has it. Nothing is sent to a server.
   ("first thing tomorrow", "end of day") are worked out by Gemini Nano.
 - **Default due time:** tasks with no date are due today, and tasks with no time get a default
   (19:00 unless you change it).
+- **Reminders:** every task with a due time gets a reminder at that time. Emoji-style task lines
+  carry TaskForge's `⏰ 19:00`, and TaskNotes notes get a `reminders` entry, so TaskForge (or the
+  TaskNotes plugin) notifies you when it's due.
 - **Place reminders:** save places like "gym" or "home", then say "…when I get to the gym". You get
   a notification listing that place's open tasks when you arrive. Tasks completed elsewhere are skipped.
 - **Your format:**
@@ -99,7 +102,8 @@ Settings › Advanced features › Customize keys › Home key double press › 
 
 ## Limitations
 
-- Times are stored only in TaskNotes notes. Obsidian Tasks lines hold a date.
+- Dataview-style lines hold only a date, so they get no timed reminder; use the emoji style or
+  TaskNotes for that. The Obsidian Tasks plugin itself ignores `⏰`; TaskForge reads it.
 - Repeating tasks ("every Monday") aren't supported yet.
 - Spoken English only.
 - Geofence arrivals can take a minute or two, and need location services on.

@@ -260,10 +260,22 @@ class ParsingTest {
     }
 
     @Test
+    fun timedTasksGetTaskForgeReminder() {
+        val task = ParsedTask("Email Sam", LocalDate.of(2026, 11, 2), Priority.HIGH, time = LocalTime.of(9, 5))
+        assertEquals("- [ ] Email Sam ⏫ 📅 2026-11-02 ⏰ 09:05", TaskFormatter.format(task, TaskFormat.EMOJI))
+        // A time with no date has nothing to hang a reminder on.
+        assertEquals("- [ ] Email Sam", TaskFormatter.format(ParsedTask("Email Sam", time = LocalTime.of(9, 5)), TaskFormat.EMOJI))
+    }
+
+    @Test
     fun formatsTaskNotes() {
         val now = java.time.ZonedDateTime.of(2026, 10, 30, 14, 5, 9, 123_000_000, java.time.ZoneOffset.ofHours(-6))
         val task = ParsedTask("Email Sam", LocalDate.of(2026, 11, 2), Priority.HIGHEST, listOf("Work", "task"))
-        assert("due: \"2026-11-02T08:30\"" in TaskNotesFormatter.format(task.copy(time = LocalTime.of(8, 30)), now))
+        val timed = TaskNotesFormatter.format(task.copy(time = LocalTime.of(8, 30)), now)
+        assert("due: \"2026-11-02T08:30\"" in timed)
+        assert(
+            "reminders:\n  - id: rem_1793390709123_due\n    type: relative\n    relatedTo: due\n    offset: PT0M\n" in timed,
+        )
         assertEquals(
             """
             ---
@@ -281,7 +293,7 @@ class ParsingTest {
             TaskNotesFormatter.format(task, now),
         )
         val plain = TaskNotesFormatter.format(ParsedTask("Buy milk"), now)
-        assert("priority: normal" in plain && "due:" !in plain)
+        assert("priority: normal" in plain && "due:" !in plain && "reminders:" !in plain)
     }
 
     @Test

@@ -46,10 +46,15 @@ data class ParsedTask(
         }
 }
 
-/** The two field styles Obsidian Tasks (and TaskForge) understand. */
+/**
+ * The two field styles Obsidian Tasks (and TaskForge) understand.
+ * In [EMOJI] lines a timed task also gets TaskForge's "⏰ HH:mm", which it turns into a notification.
+ */
 enum class TaskFormat { EMOJI, DATAVIEW }
 
 object TaskFormatter {
+
+    private val HOUR_MINUTE = DateTimeFormatter.ofPattern("HH:mm")
 
     fun format(task: ParsedTask, format: TaskFormat): String = buildString {
         append("- [ ] ").append(task.text)
@@ -57,7 +62,10 @@ object TaskFormatter {
         when (format) {
             TaskFormat.EMOJI -> {
                 task.priority?.let { append(' ').append(it.emoji) }
-                task.due?.let { append(" 📅 ").append(it) }
+                task.due?.let { due ->
+                    append(" 📅 ").append(due)
+                    task.time?.let { append(" ⏰ ").append(it.format(HOUR_MINUTE)) }
+                }
             }
             TaskFormat.DATAVIEW -> {
                 task.priority?.let { append(" [priority:: ").append(it.dataview).append(']') }
@@ -76,7 +84,8 @@ object TaskFormatter {
 /**
  * A TaskNotes task note: YAML properties only, with the title kept in the file name.
  * Matches the plugin's defaults (task tag "task", statuses open/done,
- * priorities none/low/normal/high).
+ * priorities none/low/normal/high). A timed task gets a reminder at its due time,
+ * which the TaskNotes plugin and TaskForge both notify for.
  */
 object TaskNotesFormatter {
 
@@ -95,6 +104,13 @@ object TaskNotesFormatter {
         }
         appendLine("tags:")
         (listOf(TASK_TAG) + TaskFormatter.cleanTags(task.tags)).distinct().forEach { appendLine("  - $it") }
+        if (task.due != null && task.time != null) {
+            appendLine("reminders:")
+            appendLine("  - id: rem_${now.toInstant().toEpochMilli()}_due")
+            appendLine("    type: relative")
+            appendLine("    relatedTo: due")
+            appendLine("    offset: PT0M")
+        }
         task.place?.let {
             appendLine("contexts:")
             appendLine("  - ${it.slug}")
