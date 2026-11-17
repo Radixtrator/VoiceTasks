@@ -24,8 +24,8 @@ uses Gemini Nano when the phone has it. Nothing is sent to a server.
 - **Default due time:** tasks with no date are due today, and tasks with no time get a default
   (19:00 unless you change it).
 - **Reminders:** every task with a due time gets a reminder at that time. Emoji-style task lines
-  carry TaskForge's `⏰ 19:00`, and TaskNotes notes get a `reminders` entry, so TaskForge (or the
-  TaskNotes plugin) notifies you when it's due.
+  carry TaskForge's `⏰ 19:00`, which TaskForge notifies for, and TaskNotes notes get a
+  `reminders` entry at the due time.
 - **Place reminders:** save places like "gym" or "home", then say "…when I get to the gym". You get
   a notification listing that place's open tasks when you arrive. Tasks completed elsewhere are skipped.
 - **Your format:**

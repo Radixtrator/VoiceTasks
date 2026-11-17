@@ -85,7 +85,7 @@ object TaskFormatter {
  * A TaskNotes task note: YAML properties only, with the title kept in the file name.
  * Matches the plugin's defaults (task tag "task", statuses open/done,
  * priorities none/low/normal/high). A timed task gets a reminder at its due time,
- * which the TaskNotes plugin and TaskForge both notify for.
+ * in the TaskNotes plugin's reminder format.
  */
 object TaskNotesFormatter {
 
