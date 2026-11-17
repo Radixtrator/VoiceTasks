@@ -49,12 +49,15 @@ data class ParsedTask(
 /**
  * The two field styles Obsidian Tasks (and TaskForge) understand.
  * In [EMOJI] lines a timed task also gets TaskForge's "⏰ HH:mm", which it turns into a notification.
+ * Every line is marked to be archived when it's done ("🏁 archive" / "[onCompletion:: archive]"),
+ * which TaskForge acts on so finished tasks don't pile up.
  */
 enum class TaskFormat { EMOJI, DATAVIEW }
 
 object TaskFormatter {
 
     private val HOUR_MINUTE = DateTimeFormatter.ofPattern("HH:mm")
+    private const val ON_COMPLETION = "archive"
 
     fun format(task: ParsedTask, format: TaskFormat): String = buildString {
         append("- [ ] ").append(task.text)
@@ -66,10 +69,12 @@ object TaskFormatter {
                     append(" 📅 ").append(due)
                     task.time?.let { append(" ⏰ ").append(it.format(HOUR_MINUTE)) }
                 }
+                append(" 🏁 ").append(ON_COMPLETION)
             }
             TaskFormat.DATAVIEW -> {
                 task.priority?.let { append(" [priority:: ").append(it.dataview).append(']') }
                 task.due?.let { append(" [due:: ").append(it).append(']') }
+                append(" [onCompletion:: ").append(ON_COMPLETION).append(']')
             }
         }
     }

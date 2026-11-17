@@ -186,7 +186,7 @@ class ParsingTest {
         assertEquals(ParsedTask("Buy milk", place = store), LlmPrompt.parse(reply, now, places)!!.single())
 
         assertEquals("grocery-store", store.slug)
-        assertEquals("- [ ] Buy milk #place/grocery-store", TaskFormatter.format(ParsedTask("Buy milk", place = store), TaskFormat.EMOJI))
+        assertEquals("- [ ] Buy milk #place/grocery-store 🏁 archive", TaskFormatter.format(ParsedTask("Buy milk", place = store), TaskFormat.EMOJI))
         assert("contexts:\n  - grocery-store\n" in TaskNotesFormatter.format(ParsedTask("Buy milk", place = store), now.atZone(java.time.ZoneOffset.UTC)))
         assertEquals(48.8584 to 2.2945, Place.parseCoordinates("48.8584, 2.2945"))
         assertNull(Place.parseCoordinates("48.8584"))
@@ -251,20 +251,20 @@ class ParsingTest {
     @Test
     fun formatsBothStyles() {
         val task = ParsedTask("Email Sam", LocalDate.of(2026, 11, 2), Priority.HIGH, listOf("Work", "2026", "big project"))
-        assertEquals("- [ ] Email Sam #work #bigproject ⏫ 📅 2026-11-02", TaskFormatter.format(task, TaskFormat.EMOJI))
+        assertEquals("- [ ] Email Sam #work #bigproject ⏫ 📅 2026-11-02 🏁 archive", TaskFormatter.format(task, TaskFormat.EMOJI))
         assertEquals(
-            "- [ ] Email Sam #work #bigproject [priority:: high] [due:: 2026-11-02]",
+            "- [ ] Email Sam #work #bigproject [priority:: high] [due:: 2026-11-02] [onCompletion:: archive]",
             TaskFormatter.format(task, TaskFormat.DATAVIEW),
         )
-        assertEquals("- [ ] Buy milk", TaskFormatter.format(ParsedTask("Buy milk"), TaskFormat.EMOJI))
+        assertEquals("- [ ] Buy milk 🏁 archive", TaskFormatter.format(ParsedTask("Buy milk"), TaskFormat.EMOJI))
     }
 
     @Test
     fun timedTasksGetTaskForgeReminder() {
         val task = ParsedTask("Email Sam", LocalDate.of(2026, 11, 2), Priority.HIGH, time = LocalTime.of(9, 5))
-        assertEquals("- [ ] Email Sam ⏫ 📅 2026-11-02 ⏰ 09:05", TaskFormatter.format(task, TaskFormat.EMOJI))
+        assertEquals("- [ ] Email Sam ⏫ 📅 2026-11-02 ⏰ 09:05 🏁 archive", TaskFormatter.format(task, TaskFormat.EMOJI))
         // A time with no date has nothing to hang a reminder on.
-        assertEquals("- [ ] Email Sam", TaskFormatter.format(ParsedTask("Email Sam", time = LocalTime.of(9, 5)), TaskFormat.EMOJI))
+        assertEquals("- [ ] Email Sam 🏁 archive", TaskFormatter.format(ParsedTask("Email Sam", time = LocalTime.of(9, 5)), TaskFormat.EMOJI))
     }
 
     @Test
