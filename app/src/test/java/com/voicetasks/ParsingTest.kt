@@ -285,6 +285,7 @@ class ParsingTest {
             tags:
               - task
               - work
+            onCompletion: archive
             dateCreated: 2026-10-30T14:05:09.123-06:00
             dateModified: 2026-10-30T14:05:09.123-06:00
             ---

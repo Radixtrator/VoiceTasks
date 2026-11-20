@@ -57,7 +57,8 @@ enum class TaskFormat { EMOJI, DATAVIEW }
 object TaskFormatter {
 
     private val HOUR_MINUTE = DateTimeFormatter.ofPattern("HH:mm")
-    private const val ON_COMPLETION = "archive"
+    /** TaskForge's on-completion action: archive the task when it's ticked off. */
+    const val ON_COMPLETION = "archive"
 
     fun format(task: ParsedTask, format: TaskFormat): String = buildString {
         append("- [ ] ").append(task.text)
@@ -90,7 +91,9 @@ object TaskFormatter {
  * A TaskNotes task note: YAML properties only, with the title kept in the file name.
  * Matches the plugin's defaults (task tag "task", statuses open/done,
  * priorities none/low/normal/high). A timed task gets a reminder at its due time,
- * in the TaskNotes plugin's reminder format.
+ * in the TaskNotes plugin's reminder format. Like task lines, every note carries TaskForge's
+ * on-completion action (onCompletion: archive), so TaskForge archives it when you mark it done;
+ * the TaskNotes plugin ignores the key.
  */
 object TaskNotesFormatter {
 
@@ -120,6 +123,7 @@ object TaskNotesFormatter {
             appendLine("contexts:")
             appendLine("  - ${it.slug}")
         }
+        appendLine("onCompletion: ${TaskFormatter.ON_COMPLETION}")
         appendLine("dateCreated: $timestamp")
         appendLine("dateModified: $timestamp")
         appendLine("---")

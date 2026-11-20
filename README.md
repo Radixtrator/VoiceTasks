@@ -26,10 +26,10 @@ uses Gemini Nano when the phone has it. Nothing is sent to a server.
 - **Reminders:** every task with a due time gets a reminder at that time. Emoji-style task lines
   carry TaskForge's `⏰ 19:00`, which TaskForge notifies for, and TaskNotes notes get a
   `reminders` entry at the due time.
-- **Archived when done:** task lines carry TaskForge's on-completion flag (`🏁 archive`, or
-  `[onCompletion:: archive]` in Dataview style), so TaskForge moves them out of the way once
-  you tick them off. TaskNotes notes can't hold this flag; turn on archiving in the TaskNotes
-  plugin instead (see Setup).
+- **Archived when done:** every task carries TaskForge's on-completion action, so TaskForge
+  archives it when you mark it done: `🏁 archive` on emoji lines, `[onCompletion:: archive]` on
+  Dataview lines, and `onCompletion: archive` in TaskNotes frontmatter. The Obsidian Tasks and
+  TaskNotes plugins don't archive on their own; tick tasks off in TaskForge.
 - **Place reminders:** save places like "gym" or "home", then say "…when I get to the gym". You get
   a notification listing that place's open tasks when you arrive. Tasks completed elsewhere are skipped.
 - **Your format:**
@@ -95,10 +95,6 @@ Tests cover the date, time, place and model-reply parsing:
    Advanced features › Side button › Double press › Open app › **Quick Task**.
 5. For place reminders: allow location (choose *Allow all the time*) and notifications, then add
    places by name, with your current location or coordinates pasted from Google Maps.
-
-If you use TaskNotes notes, have finished ones archived and moved out of the task folder in the
-TaskNotes plugin: Settings › Task Properties › Task Statuses › *done* › turn on **Auto-archive**, and
-in General turn on **Move archived tasks to folder**.
 
 The **Test the parser** box at the bottom of the settings screen shows exactly what a sentence
 would produce without writing anything.
