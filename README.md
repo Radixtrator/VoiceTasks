@@ -107,7 +107,7 @@ Settings › Advanced features › Customize keys › Home key double press › 
 ## Limitations
 
 - Dataview-style lines hold only a date, so they get no timed reminder; use the emoji style or
-  TaskNotes for that. The Obsidian Tasks plugin itself ignores `⏰`; TaskForge reads it.
+  TaskNotes for that. The Obsidian Tasks plugin itself ignores `⏰` (it is written before the priority and dates, so the plugin still reads those); TaskForge reads it.
 - Repeating tasks ("every Monday") aren't supported yet.
 - Spoken English only.
 - Geofence arrivals can take a minute or two, and need location services on.

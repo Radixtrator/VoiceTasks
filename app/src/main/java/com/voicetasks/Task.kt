@@ -65,11 +65,11 @@ object TaskFormatter {
         (cleanTags(task.tags) + listOfNotNull(task.place?.let { "place/${it.slug}" })).forEach { append(" #").append(it) }
         when (format) {
             TaskFormat.EMOJI -> {
+                // Obsidian Tasks reads fields from the end of the line and stops at the first one it
+                // doesn't know, so TaskForge's ⏰ has to come before priority and dates.
+                if (task.due != null && task.time != null) append(" ⏰ ").append(task.time.format(HOUR_MINUTE))
                 task.priority?.let { append(' ').append(it.emoji) }
-                task.due?.let { due ->
-                    append(" 📅 ").append(due)
-                    task.time?.let { append(" ⏰ ").append(it.format(HOUR_MINUTE)) }
-                }
+                task.due?.let { append(" 📅 ").append(it) }
                 append(" 🏁 ").append(ON_COMPLETION)
             }
             TaskFormat.DATAVIEW -> {
@@ -89,8 +89,8 @@ object TaskFormatter {
 
 /**
  * A TaskNotes task note: YAML properties only, with the title kept in the file name.
- * Matches the plugin's defaults (task tag "task", statuses open/done,
- * priorities none/low/normal/high). A timed task gets a reminder at its due time,
+ * Uses task tag "task", status "open", and TaskForge's five priorities
+ * (highest/high/medium/low/lowest, "none" when unset). A timed task gets a reminder at its due time,
  * in the TaskNotes plugin's reminder format. Like task lines, every note carries TaskForge's
  * on-completion action (onCompletion: archive), so TaskForge archives it when you mark it done;
  * the TaskNotes plugin ignores the key.
@@ -105,7 +105,7 @@ object TaskNotesFormatter {
         val timestamp = now.format(TIMESTAMP)
         appendLine("---")
         appendLine("status: open")
-        appendLine("priority: ${priority(task.priority)}")
+        appendLine("priority: ${task.priority?.dataview ?: "none"}")
         // Same shape TaskForge writes: a quoted local date-time, or a bare date.
         task.due?.let { due ->
             appendLine(task.time?.let { "due: \"${due}T${it.format(HOUR_MINUTE)}\"" } ?: "due: $due")
@@ -127,12 +127,5 @@ object TaskNotesFormatter {
         appendLine("dateCreated: $timestamp")
         appendLine("dateModified: $timestamp")
         appendLine("---")
-    }
-
-    // TaskNotes has four levels, so the extremes fold into high and low.
-    private fun priority(priority: Priority?): String = when (priority) {
-        Priority.HIGHEST, Priority.HIGH -> "high"
-        Priority.MEDIUM, null -> "normal"
-        Priority.LOW, Priority.LOWEST -> "low"
     }
 }
