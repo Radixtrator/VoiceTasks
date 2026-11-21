@@ -84,6 +84,34 @@ Tests cover the date, time, place and model-reply parsing:
 ./gradlew :app:testDebugUnitTest
 ```
 
+## Installing and updating with Obtainium
+
+Every `v1.2.3` tag builds signed APKs on GitHub Actions and attaches them to a
+[release](https://github.com/Radixtrator/VoiceTasks/releases): `VoiceTasks-1.2.3-phone.apk` and
+`VoiceTasks-1.2.3-wear.apk`.
+
+In [Obtainium](https://github.com/ImranR98/Obtainium), add an app with the source URL
+`https://github.com/Radixtrator/VoiceTasks` and set **Filter APKs by regular expression** to
+`phone`, so it installs the phone APK and ignores the watch one. Obtainium then offers each new
+release as an update. Install the watch APK with `adb` (Obtainium can't install to a watch).
+
+To publish a release, tag a commit and push the tag:
+
+```bash
+git tag v1.2.3
+git push origin v1.2.3
+```
+
+The version code comes from the tag (`v1.2.3` → 10203), so tags must keep going up.
+
+**Signing:** releases are signed with the same debug keystore as local builds, so a GitHub
+release installs over an `adb` build and back. The workflow reads it from the
+`SIGNING_KEYSTORE_BASE64` repository secret; if that machine's keystore changes, update the secret:
+
+```bash
+base64 -w0 ~/.android/debug.keystore | gh secret set SIGNING_KEYSTORE_BASE64
+```
+
 ## Setup on the phone
 
 1. Open **Voice Tasks** and choose your vault folder.

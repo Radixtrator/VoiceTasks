@@ -11,8 +11,9 @@ android {
         applicationId = "com.voicetasks"
         minSdk = 31
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        // Release builds pass these from the git tag (see .github/workflows/release.yml).
+        versionCode = providers.gradleProperty("versionCode").map(String::toInt).getOrElse(1)
+        versionName = providers.gradleProperty("versionName").getOrElse("1.0")
         // Phones only; the Gemma runtime adds ~30 MB per ABI.
         ndk { abiFilters += "arm64-v8a" }
     }
@@ -20,7 +21,8 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            // Signed with the debug key so the release APK installs directly.
+            // Signed with the debug key so the release APK installs directly. CI installs the same
+            // debug keystore from a secret, so GitHub releases update local builds and vice versa.
             signingConfig = signingConfigs.getByName("debug")
         }
     }
